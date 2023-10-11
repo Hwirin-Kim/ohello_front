@@ -2,10 +2,12 @@ const SIZE = 8; // 8*8
 const WHITE = "white";
 const BLACK = "black";
 
-type Matrix = "white" | "black" | undefined;
+export type CellType = "white" | "black" | undefined;
+export type RowType = CellType[];
+export type MatrixType = RowType[];
 
 export const getInitialMatrix = () => {
-  const matrix: Matrix[][] = Array.from({ length: SIZE }, () =>
+  const matrix: MatrixType = Array.from({ length: SIZE }, () =>
     Array.from({ length: SIZE }, () => undefined)
   );
   matrix[3][3] = WHITE;

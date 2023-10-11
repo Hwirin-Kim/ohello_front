@@ -1,9 +1,11 @@
 import { styled } from "styled-components";
 type Props = {
   color: string | undefined;
+
+  handleCellClick: () => void;
 };
-export default function Cell({ color }: Props) {
-  return <StCellContainer color={color} />;
+export default function Cell({ color, handleCellClick }: Props) {
+  return <StCellContainer color={color} onClick={handleCellClick} />;
 }
 
 const StCellContainer = styled.div<{ color?: string }>`

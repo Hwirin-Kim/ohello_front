@@ -5,10 +5,23 @@ import { getInitialMatrix } from "../utils/getInitialMatrix";
 
 export default function PlayGamePage() {
   const [matrix, setMatrix] = useState(getInitialMatrix);
+
+  const handleCellClick = (index: number) => {
+    const [row, col] = [Math.floor(index / 8), index % 8];
+    console.log(row, col);
+  };
+
   return (
     <StMatrix>
       {matrix.map((row, index) => {
-        return <Row row={row} />;
+        return (
+          <Row
+            key={index}
+            row={row}
+            rowIndex={index}
+            handleCellClick={handleCellClick}
+          />
+        );
       })}
     </StMatrix>
   );

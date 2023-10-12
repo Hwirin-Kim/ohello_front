@@ -23,12 +23,12 @@ export default function PlayGamePage() {
     }
 
     setMatrix((prev) => {
-      const newBoard = prev.map((r) => [...r]);
+      const newMatrix = prev.map((row) => [...row]);
       flipTargets.forEach(([r, c]) => {
-        newBoard[r][c] = turn;
+        newMatrix[r][c] = turn;
       });
-      newBoard[row][col] = turn;
-      return newBoard;
+      newMatrix[row][col] = turn;
+      return newMatrix;
     });
 
     // 턴 바꿈

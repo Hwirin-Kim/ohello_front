@@ -16,6 +16,23 @@ export default function PlayGamePage() {
     const flipTargets =
       !matrix[row][col] && getFlipTargets(matrix, turn, { row, col });
     console.log(flipTargets);
+
+    if (!flipTargets || !flipTargets.length) {
+      alert("둘 수 없는 위치입니다.");
+      return;
+    }
+
+    setMatrix((prev) => {
+      const newBoard = prev.map((r) => [...r]);
+      flipTargets.forEach(([r, c]) => {
+        newBoard[r][c] = turn;
+      });
+      newBoard[row][col] = turn;
+      return newBoard;
+    });
+
+    // 턴 바꿈
+    setTurn((prev) => (prev === "white" ? "black" : "white"));
   };
 
   return (

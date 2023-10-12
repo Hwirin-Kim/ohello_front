@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
-import { RowType } from "../utils/getInitialMatrix";
+import { RowType } from "../types";
+
 import Cell from "./Cell";
 
 type Props = {

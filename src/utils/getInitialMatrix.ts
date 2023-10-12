@@ -1,10 +1,8 @@
+import { MatrixType } from "../types";
+
 const SIZE = 8; // 8*8
 const WHITE = "white";
 const BLACK = "black";
-
-export type CellType = "white" | "black" | undefined;
-export type RowType = CellType[];
-export type MatrixType = RowType[];
 
 export const getInitialMatrix = () => {
   const matrix: MatrixType = Array.from({ length: SIZE }, () =>

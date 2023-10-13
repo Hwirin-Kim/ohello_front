@@ -23,7 +23,7 @@ const sliceArray = (
 };
 
 /**
- * @param matrix
+ * @param matrix : 보드판 좌표 배열
  * @param value : click한 사람의 돌 value (turn과 같음)
  * @param coordinate : click한 위치
  * @returns 뒤집어야할 target좌표들의 배열

@@ -18,7 +18,7 @@ export default function PlayGamePage() {
     console.log(flipTargets);
 
     if (!flipTargets || !flipTargets.length) {
-      alert("둘 수 없는 위치입니다.");
+      alert("둘 수 없는 위치 입니다.");
       return;
     }
 

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Row from "../components/Row";
 import { CellType } from "../types";
+import { gameInformation } from "../utils/gameInformation";
 import { getFlipTargets } from "../utils/gameLogic";
 
 import { getInitialMatrix } from "../utils/getInitialMatrix";
@@ -9,6 +10,7 @@ import { getInitialMatrix } from "../utils/getInitialMatrix";
 export default function PlayGamePage() {
   const [matrix, setMatrix] = useState(getInitialMatrix);
   const [turn, setTurn] = useState<CellType>("black");
+
   const handleCellClick = (index: number) => {
     const [row, col] = [Math.floor(index / 8), index % 8];
     console.log(`row:${row}, col:${col}`);
@@ -31,9 +33,16 @@ export default function PlayGamePage() {
       return newMatrix;
     });
 
-    // 턴 바꿈
     setTurn((prev) => (prev === "white" ? "black" : "white"));
   };
+
+  useEffect(() => {
+    const { white, black, emptyCell, isAvailable } = gameInformation(
+      turn,
+      matrix
+    );
+    console.log(isAvailable);
+  }, [turn, matrix]);
 
   return (
     <StMatrix>

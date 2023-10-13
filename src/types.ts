@@ -6,6 +6,12 @@ export type CellCoordinatesType = [number, number];
 export type FlipTargetsType = CellCoordinatesType[];
 export type GetFlipTargetType = [FlipTargetsType, FlipTargetsType];
 export type Coordinate = { row: number; col: number };
+export type Information = {
+  white: number;
+  black: number;
+  emptyCell: Coordinate[];
+  isAvailable: boolean;
+};
 
 //findLastIndex
 declare global {

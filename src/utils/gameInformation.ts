@@ -19,8 +19,8 @@ export const gameInformation = (turn: CellType, matrix: MatrixType) => {
     })
   );
 
-  information.isAvailable = information.emptyCell.some((cell) =>
-    getFlipTargets(matrix, turn, cell)
+  information.isAvailable = information.emptyCell.some(
+    (cell) => getFlipTargets(matrix, turn, cell).length
   );
 
   return information;

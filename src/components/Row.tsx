@@ -7,8 +7,14 @@ type Props = {
   row: RowType;
   rowIndex: number;
   handleCellClick: (index: number) => void;
+  gameOver: boolean;
 };
-export default function Row({ row, rowIndex, handleCellClick }: Props) {
+export default function Row({
+  row,
+  rowIndex,
+  handleCellClick,
+  gameOver,
+}: Props) {
   return (
     <StRowContainer>
       {row.map((cell, index) => {
@@ -16,7 +22,9 @@ export default function Row({ row, rowIndex, handleCellClick }: Props) {
           <Cell
             key={`${rowIndex},${index}`}
             color={cell}
-            handleCellClick={() => handleCellClick(rowIndex * 8 + index)}
+            handleCellClick={() =>
+              gameOver ? undefined : handleCellClick(rowIndex * 8 + index)
+            }
           />
         );
       })}

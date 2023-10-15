@@ -1,7 +1,7 @@
-import PlayGamePage from "./pages/PlayGamePage";
+import Router from "./router/Router";
 
 function App() {
-  return <PlayGamePage />;
+  return <Router />;
 }
 
 export default App;

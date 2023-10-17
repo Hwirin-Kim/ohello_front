@@ -10,7 +10,7 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route element={<SocketLayout />}>
-          <Route path="/game" element={<PlayGamePage />} />
+          <Route path="/room/:id" element={<PlayGamePage />} />
           <Route path="/lobby" element={<LobbyPage />} />
         </Route>
       </Routes>

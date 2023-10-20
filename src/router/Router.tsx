@@ -2,7 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SocketLayout from "../components/SocketLayout";
 import HomePage from "../pages/HomePage";
 import LobbyPage from "../pages/LobbyPage";
-import PlayGamePage from "../pages/PlayGamePage";
+
+import GameRoomPage from "../pages/GameRoomPage";
 
 export default function Router() {
   return (
@@ -10,7 +11,7 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route element={<SocketLayout />}>
-          <Route path="/room/:id" element={<PlayGamePage />} />
+          <Route path="/room/:id" element={<GameRoomPage />} />
           <Route path="/lobby" element={<LobbyPage />} />
         </Route>
       </Routes>

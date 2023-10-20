@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import RoomList from "../components/RoomList";
 import { useSocket } from "../context/SocketContext";
-
-type RoomList = {
-  sockets: string[];
-  title: string;
-  roomId: string;
-};
+import { Room } from "../types";
 
 export default function LobbyPage() {
   const socket = useSocket();
   const [roomName, setRoomName] = useState("");
-  const [roomList, setRoomList] = useState<RoomList[]>([]);
+  const [roomList, setRoomList] = useState<Room[]>([]);
   const navigation = useNavigate();
   const onCreateRoom = () => {
     if (socket) {
@@ -25,34 +21,35 @@ export default function LobbyPage() {
   };
 
   useEffect(() => {
+    console.log("생김");
     if (socket) {
-      socket.emit("message", "하위이이이");
       socket.on("created_room", (data) => {
         if (data.success) {
+          console.log("여러번?");
           navigation(`/room/${data.roomId}`);
         }
       });
-      socket.on("room_list", (data: RoomList[]) => {
+      socket.on("room_list", (data: Room[]) => {
         setRoomList(data);
       });
+      socket.emit("get_room");
     }
+    console.log(socket);
 
     return () => {
       if (socket) {
-        socket.off("connect", () => {});
+        socket.off("created_room");
+        socket.off("get_room");
+        socket.off("connect");
+        socket.off("room_list");
       }
     };
-  }, [socket]);
+  }, [socket, navigation]);
 
   return (
-    <div>
-      <ul>
-        {roomList.map((room) => (
-          <li key={room.roomId} onClick={() => onEnterRoom(room.roomId)}>
-            {room.title}
-          </li>
-        ))}
-      </ul>
+    <section>
+      <RoomList roomList={roomList} />
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -66,6 +63,6 @@ export default function LobbyPage() {
         />
         <button>방 생성</button>
       </form>
-    </div>
+    </section>
   );
 }

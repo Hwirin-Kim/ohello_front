@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import Row from "../components/Row";
-import ScoreBoard from "../components/ScoreBoard";
+import Row from "./Row";
+import ScoreBoard from "./ScoreBoard";
 import { CellType } from "../types";
 import { gameInformation } from "../utils/gameInformation";
 import { getFlipTargets } from "../utils/gameLogic";
 
 import { getInitialMatrix } from "../utils/getInitialMatrix";
 
-export default function PlayGamePage() {
+export default function PlayGame() {
   const [matrix, setMatrix] = useState(getInitialMatrix);
   const [turn, setTurn] = useState<CellType>("black");
   const [gameOver, setGameOver] = useState(false);

@@ -22,3 +22,10 @@ declare global {
     ): number;
   }
 }
+
+export type Room = {
+  sockets: string[];
+  title: string;
+  roomId: number;
+  createdAt: number;
+};

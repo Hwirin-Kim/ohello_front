@@ -29,3 +29,9 @@ export type Room = {
   roomId: number;
   createdAt: number;
 };
+
+export type RegisterForm = {
+  username: string;
+  password: string;
+  nickname: string;
+};

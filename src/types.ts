@@ -35,3 +35,16 @@ export type RegisterForm = {
   password: string;
   nickname: string;
 };
+
+export type AxiosErrorType = {
+  response: ServerResponseType;
+};
+
+export type ServerResponseType = {
+  status: number;
+  data: ErrorType;
+};
+
+export type ErrorType = {
+  error: string;
+};

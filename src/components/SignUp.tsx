@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { styled } from "styled-components";
-import { postRegister } from "../service/auth";
+import { postDuplicate, postRegister } from "../service/auth";
 
 export type FormValue = {
   username: string;
@@ -35,27 +35,40 @@ export default function SignUp() {
       console.error("회원가입 오류:", error);
     }
   };
-  console.log(errors);
-  if (process.env.REACT_APP_AXIOS_API === undefined) {
-    console.error("REACT_APP_AXIOS_API 환경 변수가 설정되지 않았습니다.");
-  } else {
-    console.log("REACT_APP_AXIOS_API 값:", process.env.REACT_APP_AXIOS_API);
-  }
+
+  const validateUsername = async (username: string) => {
+    const isDuplicate = await postDuplicate(username);
+    if (isDuplicate) {
+      if (isDuplicate.success) return true;
+      else {
+        console.log(isDuplicate.message);
+        return isDuplicate.message;
+      }
+    } else return "서버 오류 입니다.";
+  };
+
   return (
     <StContainer>
       <StForm onSubmit={handleSubmit((data) => onSubmit(data))}>
         <StLabel>ID</StLabel>
         <StInput
           {...register("username", {
-            pattern: /^[a-z0-9]{4,16}$/,
             required: "필수로 입력하셔야 합니다.",
+            pattern: {
+              value: /^[a-z0-9]{4,16}$/,
+              message: "영어와 숫자를 조합하여 4~16글자로 입력하세요",
+            },
+            validate: async (username) => await validateUsername(username),
           })}
         />
         {errors.username && errors.username.type === "required" && (
           <StError>{errors.username.message}</StError>
         )}
         {errors.username && errors.username.type === "pattern" && (
-          <StError>영어와 숫자를 조합하여 4~16글자로 입력하세요</StError>
+          <StError>{errors.username.message}</StError>
+        )}
+        {errors.username && errors.username.type === "validate" && (
+          <StError>{errors.username.message}</StError>
         )}
         <StLabel>NICKNAME</StLabel>
         <StInput
@@ -110,12 +123,11 @@ export default function SignUp() {
 }
 const StContainer = styled.section``;
 const StForm = styled.form`
+  max-width: 15rem;
   display: flex;
   flex-direction: column;
 `;
-const StInput = styled.input`
-  max-width: 15rem;
-`;
+const StInput = styled.input``;
 const StLabel = styled.label`
   margin-top: 1rem;
 `;
@@ -123,4 +135,6 @@ const StError = styled.p`
   color: red;
   font-size: 0.8rem;
 `;
-const StButton = styled.button``;
+const StButton = styled.button`
+  margin: 2rem 0;
+`;

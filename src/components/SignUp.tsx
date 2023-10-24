@@ -26,11 +26,9 @@ export default function SignUp() {
       nickname: data.nickname.trim(),
       password: data.password.trim(),
     };
-
     try {
       // 서버로 데이터 전송
       const responseData = await postRegister(formData);
-      console.log("회원가입 성공:", responseData);
     } catch (error) {
       console.error("회원가입 오류:", error);
     }
@@ -41,7 +39,6 @@ export default function SignUp() {
     if (isDuplicate) {
       if (isDuplicate.success) return true;
       else {
-        console.log(isDuplicate.message);
         return isDuplicate.message;
       }
     } else return "서버 오류 입니다.";
@@ -73,7 +70,10 @@ export default function SignUp() {
         <StLabel>NICKNAME</StLabel>
         <StInput
           {...register("nickname", {
-            pattern: /^[a-zA-Z0-9\u0000-\uFFFF]{2,5}$/,
+            pattern: {
+              value: /^[a-zA-Z0-9\u0000-\uFFFF]{2,5}$/,
+              message: "2~5글자를 입력하세요!",
+            },
             required: "필수로 입력하셔야 합니다.",
           })}
         />
@@ -81,15 +81,15 @@ export default function SignUp() {
           <StError>{errors.nickname.message}</StError>
         )}
         {errors.nickname && errors.nickname.type === "pattern" && (
-          <StError>2~5글자를 입력하세요!</StError>
+          <StError>{errors.nickname.message}</StError>
         )}
 
         <StLabel>PASSWORD</StLabel>
         <StInput
           type="password"
           {...register("password", {
-            minLength: 6,
-            maxLength: 20,
+            minLength: { value: 6, message: "6~20글자 사이로 입력하세요" },
+            maxLength: { value: 20, message: "6~20글자 사이로 입력하세요" },
             required: "필수로 입력하셔야 합니다.",
           })}
         />
@@ -98,7 +98,7 @@ export default function SignUp() {
         )}
         {errors.password &&
           errors.password.type === ("minLength" || "maxLength") && (
-            <StError>6~20글자 사이로 입력하세요</StError>
+            <StError>{errors.password.message}</StError>
           )}
 
         <StLabel>PASSWORD CHECK</StLabel>

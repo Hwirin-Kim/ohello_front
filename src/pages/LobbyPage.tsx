@@ -21,11 +21,9 @@ export default function LobbyPage() {
   };
 
   useEffect(() => {
-    console.log("생김");
     if (socket) {
       socket.on("created_room", (data) => {
         if (data.success) {
-          console.log("여러번?");
           navigation(`/room/${data.roomId}`);
         }
       });
@@ -34,7 +32,6 @@ export default function LobbyPage() {
       });
       socket.emit("get_room");
     }
-    console.log(socket);
 
     return () => {
       if (socket) {

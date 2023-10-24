@@ -56,7 +56,6 @@ export default function PlayGame() {
         setTurn((prev) => (prev === "white" ? "black" : "white"));
       }
     }
-    console.log(isAvailable);
   }, [turn, matrix]);
 
   return (

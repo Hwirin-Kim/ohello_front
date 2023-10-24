@@ -15,6 +15,7 @@ export default function SignUp() {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormValue>({ mode: "onChange" });
 
@@ -29,8 +30,12 @@ export default function SignUp() {
     try {
       // 서버로 데이터 전송
       const responseData = await postRegister(formData);
+      alert(responseData.message);
+      reset();
     } catch (error) {
       console.error("회원가입 오류:", error);
+      alert("회원 가입에 실패하였습니다.");
+      reset();
     }
   };
 

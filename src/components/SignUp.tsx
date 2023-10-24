@@ -22,9 +22,9 @@ export default function SignUp() {
 
   const onSubmit = async (data: FormValue) => {
     const formData = {
-      username: data.username,
-      nickname: data.nickname,
-      password: data.password,
+      username: data.username.trim(),
+      nickname: data.nickname.trim(),
+      password: data.password.trim(),
     };
 
     try {

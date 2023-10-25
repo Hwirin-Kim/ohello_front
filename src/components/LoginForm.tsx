@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
+import { useUserContext } from "../context/UserContext";
 import { postLogin } from "../service/auth";
 import { UserLogin } from "../types";
 import LoginInput from "./LoginInput";
 
 const initialUserState = { username: "", password: "" };
 export default function LoginForm() {
+  const { setIsLogin } = useUserContext();
   const [user, setUser] = useState<UserLogin>(initialUserState);
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,9 +18,8 @@ export default function LoginForm() {
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = await postLogin(user);
-      console.log(data.message);
-      alert(data.message);
+      const { data } = await postLogin(user);
+      setIsLogin(true);
     } catch (error) {
       alert("오류발생");
     }

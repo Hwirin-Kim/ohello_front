@@ -46,6 +46,8 @@ export const postDuplicate = async (payload: string) => {
 
 //로그인
 export const postLogin = async (payload: UserLogin) => {
-  const { data } = await api.post("/login", payload);
+  const data = await api.post("/login", payload);
+  const accessToken = data.headers["authorization"];
+  localStorage.setItem("accessToken", accessToken);
   return data;
 };

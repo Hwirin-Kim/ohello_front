@@ -1,4 +1,5 @@
-import { AxiosError, isAxiosError } from "axios";
+import { UserLogin } from "./../types";
+import { AxiosError, AxiosRequestConfig, isAxiosError } from "axios";
 import { AxiosErrorType, RegisterForm } from "../types";
 import { api } from "./axios";
 
@@ -8,15 +9,15 @@ interface ResponseDataType {
 }
 
 //회원가입
-export const postRegister = async (formData: RegisterForm) => {
-  const { data } = await api.post("/register", formData);
+export const postRegister = async (payload: RegisterForm) => {
+  const { data } = await api.post("/register", payload);
   return data;
 };
 
 //id중복검사
-export const postDuplicate = async (username: string) => {
+export const postDuplicate = async (payload: string) => {
   try {
-    const response = await api.post("/check", { username });
+    const response = await api.post("/check", { payload });
     if (response.status === 200 && response.data && response.data.message) {
       return { success: true, message: response.data.message };
     }
@@ -41,4 +42,10 @@ export const postDuplicate = async (username: string) => {
       };
     }
   }
+};
+
+//로그인
+export const postLogin = async (payload: UserLogin) => {
+  const { data } = await api.post("/login", payload);
+  return data;
 };

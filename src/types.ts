@@ -48,3 +48,8 @@ export type ServerResponseType = {
 export type ErrorType = {
   error: string;
 };
+
+export type UserLogin = {
+  username: string;
+  password: string;
+};

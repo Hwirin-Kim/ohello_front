@@ -15,11 +15,19 @@ export default function Chat() {
       socket.on("receive_message", (data) => {
         setChatLog([...chatLog, data.message]);
       });
+
+      socket.on("user_left", (message) => {
+        setChatLog([...chatLog, message]);
+      });
+      socket.on("user_joined", (message) => {
+        setChatLog([...chatLog, message]);
+      });
     }
     return () => {
       socket && socket.off("receive_message");
     };
   }, [socket, chatLog]);
+  console.log(chatLog);
 
   const onSendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

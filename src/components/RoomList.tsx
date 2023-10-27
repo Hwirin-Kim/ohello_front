@@ -12,15 +12,16 @@ type Props = {
 export default function RoomList({ roomList }: Props) {
   const socket = useSocket();
   const navigation = useNavigate();
+  console.log(roomList);
 
   const joinRoomHandler = (roomId: number) => {
     socket && socket.emit("join_room", roomId);
   };
   useEffect(() => {
     socket &&
-      socket.on("joined_room", (data: { success: string; roomId: number }) => {
+      socket.on("joined_room", (data: { success: boolean; data: number }) => {
         if (data.success) {
-          navigation(`/room/${data.roomId}`);
+          navigation(`/room/${data.data}`);
         }
       });
     return () => {

@@ -7,7 +7,7 @@ import LoginInput from "./LoginInput";
 
 const initialUserState = { username: "", password: "" };
 export default function LoginForm() {
-  const { setIsLogin } = useUserContext();
+  const { setIsLogin, setUserInfo } = useUserContext();
   const [user, setUser] = useState<UserLogin>(initialUserState);
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +20,7 @@ export default function LoginForm() {
     try {
       const { data } = await postLogin(user);
       setIsLogin(true);
+      setUserInfo({ username: data.username, nickname: data.nickname });
     } catch (error) {
       alert("오류발생");
     }

@@ -1,4 +1,4 @@
-import { UserLogin } from "./../types";
+import { UserInfo, UserLogin } from "./../types";
 import { AxiosError, AxiosRequestConfig, isAxiosError } from "axios";
 import { AxiosErrorType, RegisterForm } from "../types";
 import { api } from "./axios";
@@ -47,7 +47,12 @@ export const postDuplicate = async (payload: string) => {
 //로그인
 export const postLogin = async (payload: UserLogin) => {
   const data = await api.post("/login", payload);
+  const userInfo: UserInfo = data.data;
   const accessToken = data.headers["authorization"];
   localStorage.setItem("accessToken", accessToken);
+  localStorage.setItem(
+    "userInfo",
+    JSON.stringify({ username: userInfo.username, nickname: userInfo.nickname })
+  );
   return data;
 };

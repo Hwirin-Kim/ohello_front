@@ -16,7 +16,10 @@ export default function Router() {
           element={isLogin ? <Navigate to="/lobby" /> : <HomePage />}
         />
         <Route element={<SocketLayout />}>
-          <Route path="/room/:id" element={<GameRoomPage />} />
+          <Route
+            path="/room/:id"
+            element={isLogin ? <GameRoomPage /> : <Navigate to="/" />}
+          />
           <Route
             path="/lobby"
             element={isLogin ? <LobbyPage /> : <Navigate to="/" />}

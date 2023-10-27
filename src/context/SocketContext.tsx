@@ -5,8 +5,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Outlet } from "react-router-dom";
+
 import { io, Socket } from "socket.io-client";
+import { useUserContext } from "./UserContext";
 
 const socketContext = createContext<Socket | undefined>(undefined);
 
@@ -20,9 +21,15 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }: Props) => {
   const [socket, setSocket] = useState<Socket>();
-
+  const getUserInfo = localStorage.getItem("userInfo");
+  const userInfo = getUserInfo
+    ? JSON.parse(getUserInfo)
+    : { username: "", nickname: "" };
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
-    const newSocket = io("http://localhost:8080");
+    const newSocket = io("http://localhost:8080", {
+      query: { ...userInfo, accessToken },
+    });
     setSocket(newSocket);
 
     return () => {

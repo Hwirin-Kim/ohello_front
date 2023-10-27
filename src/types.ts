@@ -53,3 +53,8 @@ export type UserLogin = {
   username: string;
   password: string;
 };
+
+export type UserInfo = {
+  username: string;
+  nickname: string;
+};

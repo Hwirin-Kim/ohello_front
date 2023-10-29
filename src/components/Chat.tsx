@@ -2,25 +2,36 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { useSocket } from "../context/SocketContext";
+import { useUserContext } from "../context/UserContext";
 
 export default function Chat() {
   const socket = useSocket();
   const { id: roomId } = useParams();
-
-  const [chatLog, setChatLog] = useState<string[]>([]);
+  const {
+    userInfo: { username },
+  } = useUserContext();
+  type message = {
+    isWhat: string;
+    senderId: string;
+    senderNickname: string;
+    message: string;
+    timestamp: number;
+  };
+  const [chatLog, setChatLog] = useState<message[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (socket) {
       socket.on("receive_message", (data) => {
-        setChatLog([...chatLog, data.message]);
+        console.log(data);
+        setChatLog([...chatLog, data.data]);
       });
 
-      socket.on("user_left", (message) => {
-        setChatLog([...chatLog, message]);
+      socket.on("user_left", (data) => {
+        setChatLog([...chatLog, data.data]);
       });
-      socket.on("user_joined", (message) => {
-        setChatLog([...chatLog, message]);
+      socket.on("user_joined", (data) => {
+        setChatLog([...chatLog, data.data]);
       });
     }
     return () => {
@@ -43,7 +54,18 @@ export default function Chat() {
     <StContainer>
       <StChatLog>
         {chatLog.map((chatLog) => (
-          <StChat>{chatLog}</StChat>
+          <StChatWrap>
+            {chatLog.isWhat === "notice" ? (
+              <StChat>{chatLog.message}</StChat>
+            ) : (
+              <>
+                <StNick $isMe={chatLog.senderId === username}>
+                  {chatLog.senderNickname}
+                </StNick>
+                <StChat>{`: ${chatLog.message}`}</StChat>
+              </>
+            )}
+          </StChatWrap>
         ))}
       </StChatLog>
       <StForm onSubmit={onSendMessage}>
@@ -56,6 +78,14 @@ export default function Chat() {
 
 const StContainer = styled.section``;
 const StChatLog = styled.div``;
+const StChatWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const StNick = styled.span<{ $isMe: boolean }>`
+  margin-right: 0.3rem;
+  ${({ $isMe }) => ($isMe ? "color: black" : "color : skyblue")}
+`;
 const StChat = styled.p``;
 const StForm = styled.form``;
 const StInput = styled.input``;

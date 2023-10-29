@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Chat from "../components/Chat";
 import PlayGame from "../components/PlayGame";
 import { useSocket } from "../context/SocketContext";
@@ -9,9 +9,11 @@ export default function GameRoomPage() {
   const socket = useSocket();
   const { userInfo } = useUserContext();
   const { id: roomId } = useParams();
+  const navigation = useNavigate();
   console.log(userInfo);
   const onLeaveRoomHandler = () => {
     if (socket) socket.emit("leave_room", roomId);
+    navigation("/lobby");
   };
   useEffect(() => {
     console.log(roomId);

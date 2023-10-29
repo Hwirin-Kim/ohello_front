@@ -11,7 +11,7 @@ export default function Chat() {
     userInfo: { username },
   } = useUserContext();
   type message = {
-    isWhat: string;
+    type: string;
     senderId: string;
     senderNickname: string;
     message: string;
@@ -55,7 +55,7 @@ export default function Chat() {
       <StChatLog>
         {chatLog.map((chatLog) => (
           <StChatWrap>
-            {chatLog.isWhat === "notice" ? (
+            {chatLog.type === "notice" ? (
               <StChat>{chatLog.message}</StChat>
             ) : (
               <>

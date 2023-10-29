@@ -1,4 +1,10 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, {
+  FormEvent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { useSocket } from "../context/SocketContext";
@@ -19,6 +25,7 @@ export default function Chat() {
   };
   const [chatLog, setChatLog] = useState<message[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chatLogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (socket) {
@@ -38,7 +45,13 @@ export default function Chat() {
       socket && socket.off("receive_message");
     };
   }, [socket, chatLog]);
-  console.log(chatLog);
+
+  useLayoutEffect(() => {
+    if (chatLogRef.current) {
+      const element = chatLogRef.current;
+      element.scrollTop = element.scrollHeight;
+    }
+  }, [chatLog]);
 
   const onSendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,7 +65,7 @@ export default function Chat() {
 
   return (
     <StContainer>
-      <StChatLog>
+      <StChatLog ref={chatLogRef}>
         {chatLog.map((chatLog) => (
           <StChatWrap>
             {chatLog.type === "notice" ? (
@@ -77,7 +90,10 @@ export default function Chat() {
 }
 
 const StContainer = styled.section``;
-const StChatLog = styled.div``;
+const StChatLog = styled.div`
+  height: 20rem;
+  overflow-y: scroll;
+`;
 const StChatWrap = styled.div`
   display: flex;
   align-items: center;

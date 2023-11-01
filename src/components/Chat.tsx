@@ -18,7 +18,7 @@ export default function Chat() {
   } = useUserContext();
   type message = {
     type: string;
-    senderId: string;
+    senderUsername: string;
     senderNickname: string;
     message: string;
     timestamp: number;
@@ -55,12 +55,13 @@ export default function Chat() {
 
   const onSendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket &&
-      inputRef.current &&
+    if (socket && inputRef.current) {
       socket.emit("send_message", {
         roomId,
         message: inputRef.current.value,
       });
+      inputRef.current.value = "";
+    }
   };
 
   return (
@@ -72,7 +73,7 @@ export default function Chat() {
               <StChat>{chatLog.message}</StChat>
             ) : (
               <>
-                <StNick $isMe={chatLog.senderId === username}>
+                <StNick $isMe={chatLog.senderUsername === username}>
                   {chatLog.senderNickname}
                 </StNick>
                 <StChat>{`: ${chatLog.message}`}</StChat>

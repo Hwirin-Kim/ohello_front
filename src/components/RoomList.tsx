@@ -42,7 +42,7 @@ export default function RoomList({ roomList }: Props) {
             <StTr
               key={createdAt}
               onClick={() => joinRoomHandler(roomId)}
-              isBody={true}
+              $isBody={true}
             >
               <StTd>{title}</StTd>
               <StTd>{elapsedTime(createdAt)}</StTd>
@@ -62,9 +62,9 @@ const StTable = styled.table`
 `;
 const StThead = styled.thead``;
 const StTbody = styled.tbody``;
-const StTr = styled.tr<{ isBody?: boolean }>`
-  ${({ isBody }) =>
-    isBody &&
+const StTr = styled.tr<{ $isBody?: boolean }>`
+  ${({ $isBody }) =>
+    $isBody &&
     `&:hover {
     background-color: #fafafa;
     cursor: pointer;

@@ -57,4 +57,19 @@ export type UserLogin = {
 export type UserInfo = {
   username: string;
   nickname: string;
+  color: CellType;
+};
+export type User = {};
+
+export type RoomInfo = {
+  roomId: string;
+  title: string;
+  users: UserInfo[];
+  createdAt: number;
+  readyUsers: UserInfo[];
+  allUsersReady: boolean;
+  gameStart: boolean;
+  turnState: "black" | "white";
+  stonePlacements: [number, number];
+  owner: UserInfo;
 };

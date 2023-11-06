@@ -17,7 +17,7 @@ export const postRegister = async (payload: RegisterForm) => {
 //id중복검사
 export const postDuplicate = async (payload: string) => {
   try {
-    const response = await api.post("/check", { payload });
+    const response = await api.post("/check", { username: payload });
     if (response.status === 200 && response.data && response.data.message) {
       return { success: true, message: response.data.message };
     }

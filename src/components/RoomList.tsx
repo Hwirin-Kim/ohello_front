@@ -15,19 +15,9 @@ export default function RoomList({ roomList }: Props) {
   console.log(roomList);
 
   const joinRoomHandler = (roomId: number) => {
-    socket && socket.emit("join_room", roomId);
+    navigation(`/room/${roomId}`);
   };
-  useEffect(() => {
-    socket &&
-      socket.on("joined_room", (data: { success: boolean; data: number }) => {
-        if (data.success) {
-          navigation(`/room/${data.data}`);
-        }
-      });
-    return () => {
-      socket && socket.off("joined_room");
-    };
-  }, [socket]);
+
   return (
     <StContainer>
       <StTable>

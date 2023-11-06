@@ -57,9 +57,9 @@ export type UserLogin = {
 export type UserInfo = {
   username: string;
   nickname: string;
+  isReady: boolean;
   color: CellType;
 };
-export type User = {};
 
 export type RoomInfo = {
   roomId: string;
@@ -73,3 +73,5 @@ export type RoomInfo = {
   stonePlacements: [number, number];
   owner: UserInfo;
 };
+
+export type SetRoom = { success: boolean; data: RoomInfo };

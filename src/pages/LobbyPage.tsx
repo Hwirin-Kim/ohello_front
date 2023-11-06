@@ -9,7 +9,7 @@ export default function LobbyPage() {
   const socket = useSocket();
   const [roomName, setRoomName] = useState("");
   const [roomList, setRoomList] = useState<Room[]>([]);
-
+  console.log(roomList);
   const { userInfo } = useUserContext();
   console.log(userInfo, "here is lobby");
 

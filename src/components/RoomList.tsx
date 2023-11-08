@@ -12,7 +12,6 @@ type Props = {
 export default function RoomList({ roomList }: Props) {
   const socket = useSocket();
   const navigation = useNavigate();
-  console.log(roomList);
 
   const joinRoomHandler = (roomId: number) => {
     navigation(`/room/${roomId}`);

@@ -5,7 +5,7 @@ import PlayGame from "../components/PlayGame";
 import Opponent from "../components/Opponent";
 import { useSocket } from "../context/SocketContext";
 import { useUserContext } from "../context/UserContext";
-import { RoomInfo, UserInfo } from "../types";
+import { CellType, RoomInfo, UserInfo } from "../types";
 
 export default function GameRoomPage() {
   const socket = useSocket();
@@ -17,6 +17,9 @@ export default function GameRoomPage() {
   const [isOwner, setIsOwner] = useState(false);
   const [opponent, setOpponent] = useState<UserInfo | undefined>();
   const [isPossible, setIsPossible] = useState(false);
+  const [currentTurn, setCurrentTurn] = useState<CellType>("black");
+  const [timer, setTimer] = useState(0);
+
   const onReadyHandler = () => {
     socket &&
       socket.emit("ready", roomId, (serverStatus: boolean) => {
@@ -26,6 +29,10 @@ export default function GameRoomPage() {
   const onLeaveRoomHandler = () => {
     if (socket) socket.emit("leave_room", roomId);
     navigation("/lobby");
+  };
+
+  const onGameStartHandler = () => {
+    if (socket) socket.emit("game_start", roomId);
   };
 
   //상대방 정보 가져오기
@@ -40,14 +47,14 @@ export default function GameRoomPage() {
       setOpponent(undefined);
     }
   }, [room]);
-
+  console.log("턴정보", currentTurn);
   //방장정보
   useEffect(() => {
     if (room?.owner.username === userInfo.username) setIsOwner(true);
     else setIsOwner(false);
   }, [room, userInfo]);
 
-  //룸 입장 및 방 정보가져오기
+  //socket관리
   useEffect(() => {
     if (socket) {
       socket.emit(
@@ -70,22 +77,50 @@ export default function GameRoomPage() {
       socket.on("possible_game_start", (data) => {
         setIsPossible(data);
       });
+
+      socket.on(
+        "current_turn",
+        (data: { success: boolean; data: CellType }) => {
+          if (data.success === true) {
+            setCurrentTurn(data.data);
+
+            // 타이머 초기화 및 시작
+            setTimer(15);
+            const timerId = setInterval(() => {
+              setTimer((prevTime) => {
+                if (prevTime <= 1) {
+                  return 0;
+                }
+                return prevTime - 1;
+              });
+            }, 1000);
+            return () => clearInterval(timerId);
+          }
+        }
+      );
     }
     return () => {
       if (socket) {
         socket.off("join_room");
 
         socket.off("room_info");
+        socket.off("current_turn");
+        socket.off("possible_game_start");
       }
     };
-  }, [socket, roomId, navigation]);
+  }, [roomId, socket]);
 
   return (
     <div>
+      <h1>{timer}</h1>
       <button onClick={onReadyHandler}>
         {ready ? "준비완료" : "준비하기"}
       </button>
-      {isOwner && <button>{isPossible ? "게임시작" : "유저 대기중"}</button>}
+      {isOwner && (
+        <button onClick={onGameStartHandler}>
+          {isPossible ? "게임시작" : "유저 대기중"}
+        </button>
+      )}
       <button onClick={onLeaveRoomHandler}>방나가기</button>
       <Opponent opponent={opponent} />
 

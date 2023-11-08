@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { useUserContext } from "../context/UserContext";
 import { postLogin } from "../service/auth";
@@ -9,7 +10,7 @@ const initialUserState = { username: "", password: "" };
 export default function LoginForm() {
   const { setIsLogin, setUserInfo } = useUserContext();
   const [user, setUser] = useState<UserLogin>(initialUserState);
-
+  const navigation = useNavigate();
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
@@ -21,6 +22,7 @@ export default function LoginForm() {
       const { data } = await postLogin(user);
       setIsLogin(true);
       setUserInfo({ username: data.username, nickname: data.nickname });
+      navigation("/lobby");
     } catch (error) {
       alert("오류발생");
     }

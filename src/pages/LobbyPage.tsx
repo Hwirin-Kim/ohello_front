@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import RoomList from "../components/RoomList";
 import { useSocket } from "../context/SocketContext";
 import { useUserContext } from "../context/UserContext";
+import { logout } from "../service/auth";
 import { Room } from "../types";
 
 export default function LobbyPage() {
   const socket = useSocket();
   const [roomName, setRoomName] = useState("");
   const [roomList, setRoomList] = useState<Room[]>([]);
-  console.log(roomList);
+
   const { userInfo } = useUserContext();
   console.log(userInfo, "here is lobby");
 

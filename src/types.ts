@@ -75,3 +75,13 @@ export type RoomInfo = {
 };
 
 export type SetRoom = { success: boolean; data: RoomInfo };
+
+export type AuthResponse = {
+  isAuthenticated: boolean;
+  user?: AuthUser;
+};
+
+export type AuthUser = {
+  username: string;
+  nickname: string;
+};

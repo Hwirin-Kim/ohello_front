@@ -57,19 +57,6 @@ export default function GameRoomPage() {
   //socket관리
   useEffect(() => {
     if (socket) {
-      socket.emit(
-        "join_room",
-        roomId,
-        (res: { success: boolean; data: RoomInfo }) => {
-          if (!res.success) {
-            alert(res.data);
-            navigation("/lobby");
-          } else {
-            setRoom(res.data);
-          }
-        }
-      );
-
       socket.on("room_info", (room) => {
         setRoom(room);
       });
@@ -101,8 +88,6 @@ export default function GameRoomPage() {
     }
     return () => {
       if (socket) {
-        socket.off("join_room");
-
         socket.off("room_info");
         socket.off("current_turn");
         socket.off("possible_game_start");

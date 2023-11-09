@@ -4,7 +4,7 @@ import RoomList from "../components/RoomList";
 import { useSocket } from "../context/SocketContext";
 import { useUserContext } from "../context/UserContext";
 import { logout } from "../service/auth";
-import { Room } from "../types";
+import { Room, RoomInfo } from "../types";
 
 export default function LobbyPage() {
   const socket = useSocket();
@@ -20,10 +20,6 @@ export default function LobbyPage() {
       socket.emit("create_room", roomName);
       setRoomName("");
     }
-  };
-
-  const onEnterRoom = (id: string) => {
-    navigation(`/room/${id}`);
   };
 
   useEffect(() => {

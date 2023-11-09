@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { useSocket } from "../context/SocketContext";
-import { Room } from "../types";
+import { Room, RoomInfo } from "../types";
 import { elapsedTime } from "../utils/dateLogic";
 
 type Props = {
@@ -13,8 +13,23 @@ export default function RoomList({ roomList }: Props) {
   const socket = useSocket();
   const navigation = useNavigate();
 
-  const joinRoomHandler = (roomId: number) => {
-    navigation(`/room/${roomId}`);
+  const onJoinRoomHandler = (roomId: number) => {
+    console.log(roomId);
+    socket &&
+      socket.emit(
+        "join_room",
+        roomId,
+        (res: { success: boolean; data: RoomInfo }) => {
+          console.log(res.success);
+          if (!res.success) {
+            alert(res.data);
+            navigation("/lobby");
+          } else {
+            console.log(roomId);
+            navigation(`/room/${roomId}`);
+          }
+        }
+      );
   };
 
   return (
@@ -30,7 +45,7 @@ export default function RoomList({ roomList }: Props) {
           {roomList.map(({ title, createdAt, roomId }) => (
             <StTr
               key={createdAt}
-              onClick={() => joinRoomHandler(roomId)}
+              onClick={() => onJoinRoomHandler(roomId)}
               $isBody={true}
             >
               <StTd>{title}</StTd>

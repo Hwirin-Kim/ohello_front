@@ -12,7 +12,6 @@ export default function LobbyPage() {
   const [roomList, setRoomList] = useState<Room[]>([]);
 
   const { userInfo } = useUserContext();
-  console.log(userInfo, "here is lobby");
 
   const navigation = useNavigate();
   const onCreateRoom = () => {
@@ -32,13 +31,13 @@ export default function LobbyPage() {
       socket.on("room_list", (data: Room[]) => {
         setRoomList(data);
       });
-      socket.emit("get_room");
+      socket.emit("get_room_list");
     }
 
     return () => {
       if (socket) {
         socket.off("created_room");
-        socket.off("get_room");
+        socket.off("get_room_list");
         socket.off("room_list");
       }
     };

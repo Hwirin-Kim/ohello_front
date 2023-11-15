@@ -14,18 +14,15 @@ export default function RoomList({ roomList }: Props) {
   const navigation = useNavigate();
 
   const onJoinRoomHandler = (roomId: number) => {
-    console.log(roomId);
     socket &&
       socket.emit(
         "join_room",
         roomId,
         (res: { success: boolean; data: RoomInfo }) => {
-          console.log(res.success);
           if (!res.success) {
-            alert(res.data);
+            alert(res);
             navigation("/lobby");
           } else {
-            console.log(roomId);
             navigation(`/room/${roomId}`);
           }
         }

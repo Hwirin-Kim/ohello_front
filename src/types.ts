@@ -64,24 +64,24 @@ export type UserInfo = {
 export type RoomInfo = {
   roomId: string;
   title: string;
-  users: UserInfo[];
+  users: SimpleUser[];
   createdAt: number;
-  readyUsers: UserInfo[];
-  allUsersReady: boolean;
+  readyUsers: SimpleUser[];
+  roomStatus: "waiting" | "ready" | "playing";
   gameStart: boolean;
   turnState: "black" | "white";
   stonePlacements: [number, number];
-  owner: UserInfo;
+  owner: SimpleUser;
 };
 
 export type SetRoom = { success: boolean; data: RoomInfo };
 
 export type AuthResponse = {
   isAuthenticated: boolean;
-  user?: AuthUser;
+  user?: SimpleUser;
 };
 
-export type AuthUser = {
+export type SimpleUser = {
   username: string;
   nickname: string;
 };

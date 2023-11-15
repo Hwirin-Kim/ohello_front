@@ -1,8 +1,11 @@
 import React from "react";
 import { styled } from "styled-components";
-import { UserInfo } from "../types";
+export type SimpleUser = {
+  username: string;
+  nickname: string;
+};
 type Props = {
-  opponent: UserInfo | undefined;
+  opponent: SimpleUser | undefined;
 };
 export default function Opponent({ opponent }: Props) {
   return (
@@ -10,7 +13,7 @@ export default function Opponent({ opponent }: Props) {
       {opponent ? (
         <>
           <StNick>{opponent.nickname}</StNick>
-          <StReady>{opponent.isReady ? "준비완료" : "대기중"}</StReady>
+          <StReady>{opponent ? "준비완료" : "대기중"}</StReady>
         </>
       ) : (
         <StNick>상대가 없습니다.</StNick>

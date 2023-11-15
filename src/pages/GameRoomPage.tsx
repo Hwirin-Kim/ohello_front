@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Chat from "../components/Chat";
 import PlayGame from "../components/PlayGame";
-import Opponent from "../components/Opponent";
+import Opponent, { SimpleUser } from "../components/Opponent";
 import { useSocket } from "../context/SocketContext";
 import { useUserContext } from "../context/UserContext";
 import { CellType, RoomInfo, UserInfo } from "../types";
+import CurrentTurn from "../components/CurrentTurn";
 
 export default function GameRoomPage() {
   const socket = useSocket();
@@ -15,10 +16,10 @@ export default function GameRoomPage() {
   const [ready, setReady] = useState(false);
   const [room, setRoom] = useState<RoomInfo | null>();
   const [isOwner, setIsOwner] = useState(false);
-  const [opponent, setOpponent] = useState<UserInfo | undefined>();
-  const [isPossible, setIsPossible] = useState(false);
+  const [opponent, setOpponent] = useState<SimpleUser | undefined>();
   const [currentTurn, setCurrentTurn] = useState<CellType>("black");
   const [timer, setTimer] = useState(0);
+  const [myColor, setMyColor] = useState<CellType>("black");
 
   const onReadyHandler = () => {
     socket &&
@@ -35,6 +36,10 @@ export default function GameRoomPage() {
     if (socket) socket.emit("game_start", roomId);
   };
 
+  const onPlacedStoneHandler = () => {
+    if (socket) socket.emit("placed_stone", roomId);
+  };
+
   //상대방 정보 가져오기
   useEffect(() => {
     if (room && room.users.length === 2) {
@@ -42,12 +47,13 @@ export default function GameRoomPage() {
       const opponent = users.find(
         (user) => user.username !== userInfo.username
       );
+
       setOpponent(opponent);
     } else {
       setOpponent(undefined);
     }
   }, [room]);
-  console.log("턴정보", currentTurn);
+
   //방장정보
   useEffect(() => {
     if (room?.owner.username === userInfo.username) setIsOwner(true);
@@ -61,27 +67,26 @@ export default function GameRoomPage() {
         setRoom(room);
       });
 
-      socket.on("possible_game_start", (data) => {
-        setIsPossible(data);
+      socket.emit("room_info", roomId, (room: RoomInfo) => {
+        setRoom(room);
       });
 
-      socket.on(
-        "current_turn",
-        (data: { success: boolean; data: CellType }) => {
-          if (data.success === true) {
-            setCurrentTurn(data.data);
+      socket.on("update_time", (time) => {
+        setTimer(time);
+      });
+      socket.on("game_over", (data) => {
+        console.log("게임오버 :", data);
+      });
 
-            // 타이머 초기화 및 시작
-            setTimer(15);
-            const timerId = setInterval(() => {
-              setTimer((prevTime) => {
-                if (prevTime <= 1) {
-                  return 0;
-                }
-                return prevTime - 1;
-              });
-            }, 1000);
-            return () => clearInterval(timerId);
+      socket.on("current_turn", (data) => {
+        setCurrentTurn(data.data);
+      });
+      socket.emit(
+        "my_stone_color",
+        roomId,
+        (data: { success: boolean; data: CellType }) => {
+          if (data.success) {
+            setMyColor(data.data);
           }
         }
       );
@@ -90,7 +95,8 @@ export default function GameRoomPage() {
       if (socket) {
         socket.off("room_info");
         socket.off("current_turn");
-        socket.off("possible_game_start");
+        socket.off("game_over");
+        socket.off("update_time");
       }
     };
   }, [roomId, socket]);
@@ -98,18 +104,25 @@ export default function GameRoomPage() {
   return (
     <div>
       <h1>{timer}</h1>
+      <h1>{myColor}</h1>
+      <button onClick={onPlacedStoneHandler}>턴넘기기버튼</button>
       <button onClick={onReadyHandler}>
         {ready ? "준비완료" : "준비하기"}
       </button>
-      {isOwner && (
+      {isOwner && room?.roomStatus !== "playing" && (
         <button onClick={onGameStartHandler}>
-          {isPossible ? "게임시작" : "유저 대기중"}
+          {room && room.roomStatus === "ready" ? "게임시작" : "유저 대기중"}
         </button>
       )}
       <button onClick={onLeaveRoomHandler}>방나가기</button>
+      <CurrentTurn currentTurn={currentTurn} />
       <Opponent opponent={opponent} />
-
-      <PlayGame />
+      <PlayGame
+        currentTurn={currentTurn}
+        myColor={myColor}
+        roomId={roomId}
+        roomStatus={room?.roomStatus}
+      />
       <Chat />
     </div>
   );

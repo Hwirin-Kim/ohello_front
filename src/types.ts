@@ -84,4 +84,6 @@ export type AuthResponse = {
 export type SimpleUser = {
   username: string;
   nickname: string;
+  isReady: boolean;
+  stoneColor: CellType;
 };

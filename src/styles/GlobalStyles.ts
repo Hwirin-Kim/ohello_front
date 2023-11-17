@@ -18,6 +18,8 @@ const GlobalStyles = createGlobalStyle`
         vertical-align: baseline;
     }
     body{
+        background-color: black;
+        color:white;
 
     }
     ol, ul{
@@ -27,6 +29,9 @@ const GlobalStyles = createGlobalStyle`
         border: 0;
         background: transparent;
         cursor: pointer;
+    }
+    html {
+      
     }
 `;
 

@@ -124,7 +124,7 @@ export default function PlayGame({
 
   return (
     <StArticle>
-      <ScoreBoard count={count} turn={currentTurn} />
+      <ScoreBoard count={count} />
       <StMatrix>
         {matrix.map((row, index) => {
           return (
@@ -146,4 +146,5 @@ const StArticle = styled.article``;
 const StMatrix = styled.div`
   display: table;
   border-collapse: collapse;
+  background-color: #242424ea;
 `;

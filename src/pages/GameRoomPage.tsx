@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Chat from "../components/Chat";
 import PlayGame from "../components/PlayGame";
-import Opponent, { SimpleUser } from "../components/Opponent";
+
 import { useSocket } from "../context/SocketContext";
 import { useUserContext } from "../context/UserContext";
-import { CellType, RoomInfo, UserInfo } from "../types";
+import { CellType, RoomInfo, SimpleUser } from "../types";
 import CurrentTurn from "../components/CurrentTurn";
+import ProfileCard from "../components/ProfileCard";
+import styled from "styled-components";
+import RoomButtonBox from "../components/RoomButtonBox";
 
 export default function GameRoomPage() {
   const socket = useSocket();
@@ -17,6 +20,7 @@ export default function GameRoomPage() {
   const [room, setRoom] = useState<RoomInfo | null>();
   const [isOwner, setIsOwner] = useState(false);
   const [opponent, setOpponent] = useState<SimpleUser | undefined>();
+  const [myInfo, setMyInfo] = useState<SimpleUser | undefined>();
   const [currentTurn, setCurrentTurn] = useState<CellType>("black");
   const [timer, setTimer] = useState(0);
   const [myColor, setMyColor] = useState<CellType>("black");
@@ -33,11 +37,15 @@ export default function GameRoomPage() {
   };
 
   const onGameStartHandler = () => {
+    if (room?.roomStatus === "waiting") {
+      alert("아직 대기중인 사용자가 있습니다.");
+      return;
+    }
+    if (room?.roomStatus === "playing") {
+      alert("이미 게임중입니다!");
+      return;
+    }
     if (socket) socket.emit("game_start", roomId);
-  };
-
-  const onPlacedStoneHandler = () => {
-    if (socket) socket.emit("placed_stone", roomId);
   };
 
   //상대방 정보 가져오기
@@ -51,6 +59,16 @@ export default function GameRoomPage() {
       setOpponent(opponent);
     } else {
       setOpponent(undefined);
+    }
+  }, [room]);
+
+  useEffect(() => {
+    if (room) {
+      const users = room.users;
+      const myInfo = users.find((user) => user.username === userInfo.username);
+      setMyInfo(myInfo);
+    } else {
+      setMyInfo(undefined);
     }
   }, [room]);
 
@@ -102,21 +120,20 @@ export default function GameRoomPage() {
   }, [roomId, socket]);
 
   return (
-    <div>
+    <StContainer>
       <h1>{timer}</h1>
-      <h1>{myColor}</h1>
-      <button onClick={onPlacedStoneHandler}>턴넘기기버튼</button>
-      <button onClick={onReadyHandler}>
-        {ready ? "준비완료" : "준비하기"}
-      </button>
-      {isOwner && room?.roomStatus !== "playing" && (
-        <button onClick={onGameStartHandler}>
-          {room && room.roomStatus === "ready" ? "게임시작" : "유저 대기중"}
-        </button>
-      )}
-      <button onClick={onLeaveRoomHandler}>방나가기</button>
-      <CurrentTurn currentTurn={currentTurn} />
-      <Opponent opponent={opponent} />
+
+      <StProfileWrap>
+        <ProfileCard userInfo={myInfo} isMe />
+        <ProfileCard userInfo={opponent} />
+      </StProfileWrap>
+      <RoomButtonBox
+        isReady={ready}
+        isOwner={isOwner}
+        onGameStartHandler={onGameStartHandler}
+        onLeaveRoomHandler={onLeaveRoomHandler}
+        onReadyHandler={onReadyHandler}
+      />
       <PlayGame
         currentTurn={currentTurn}
         myColor={myColor}
@@ -124,6 +141,20 @@ export default function GameRoomPage() {
         roomStatus={room?.roomStatus}
       />
       <Chat />
-    </div>
+    </StContainer>
   );
 }
+const StContainer = styled.section`
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
+`;
+
+const StProfileWrap = styled.div`
+  display: flex;
+  gap: 10px;
+`;

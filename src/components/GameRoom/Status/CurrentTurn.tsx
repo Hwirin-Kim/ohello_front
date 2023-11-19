@@ -1,5 +1,5 @@
 import React from "react";
-import { CellType } from "../types";
+import { CellType } from "../../../types";
 import styled from "styled-components";
 
 type Props = {

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Chat from "../components/Chat";
-import PlayGame from "../components/PlayGame";
+import Chat from "../components/GameRoom/Chat/Chat";
+import PlayGame from "../components/GameRoom/GameMatrix/PlayGame";
 
 import { useSocket } from "../context/SocketContext";
 import { useUserContext } from "../context/UserContext";
 import { CellType, RoomInfo, SimpleUser } from "../types";
-import CurrentTurn from "../components/CurrentTurn";
-import ProfileCard from "../components/ProfileCard";
+import CurrentTurn from "../components/GameRoom/Status/CurrentTurn";
+import ProfileCard from "../components/GameRoom/Status/ProfileCard";
 import styled from "styled-components";
-import RoomButtonBox from "../components/RoomButtonBox";
+import RoomButtonBox from "../components/GameRoom/RoomButtonBox";
 
 export default function GameRoomPage() {
   const socket = useSocket();

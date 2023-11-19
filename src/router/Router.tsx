@@ -5,7 +5,7 @@ import LobbyPage from "../pages/LobbyPage";
 
 import GameRoomPage from "../pages/GameRoomPage";
 
-import SignUp from "../components/SignUp";
+import SignUp from "../components/Home/SignUp";
 import ProtectedRouter from "./ProtectedRouter";
 import Layout from "../components/layout/Layout";
 

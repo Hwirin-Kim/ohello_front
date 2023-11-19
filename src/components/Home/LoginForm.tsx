@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { useUserContext } from "../context/UserContext";
-import { postLogin } from "../service/auth";
-import { UserLogin } from "../types";
+import { useUserContext } from "../../context/UserContext";
+import { postLogin } from "../../service/auth";
+import { UserLogin } from "../../types";
 import LoginInput from "./LoginInput";
 
 const initialUserState = { username: "", password: "" };

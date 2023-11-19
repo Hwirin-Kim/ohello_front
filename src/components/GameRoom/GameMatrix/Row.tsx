@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { RowType } from "../types";
+import { RowType } from "../../../types";
 
 import Cell from "./Cell";
 

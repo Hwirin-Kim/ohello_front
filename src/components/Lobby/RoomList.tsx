@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { useSocket } from "../context/SocketContext";
-import { Room, RoomInfo } from "../types";
-import { elapsedTime } from "../utils/dateLogic";
+import { useSocket } from "../../context/SocketContext";
+import { Room, RoomInfo } from "../../types";
+import { elapsedTime } from "../../utils/dateLogic";
 
 type Props = {
   roomList: Room[];

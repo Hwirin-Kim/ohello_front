@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 type Props = {
   isReady: boolean;
@@ -36,5 +36,4 @@ const StButton = styled.button`
   border: 1px solid #fff;
   border-radius: 2rem;
   padding: 0.4em;
-  box-shadow: ${({ theme }) => theme.border.shadow};
 `;

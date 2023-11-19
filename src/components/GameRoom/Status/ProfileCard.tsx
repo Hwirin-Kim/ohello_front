@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { SimpleUser } from "../types";
+import { SimpleUser } from "../../../types";
 
 type Props = {
   userInfo: SimpleUser | undefined;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RoomList from "../components/RoomList";
+import RoomList from "../components/Lobby/RoomList";
 import { useSocket } from "../context/SocketContext";
 import { useUserContext } from "../context/UserContext";
 import { logout } from "../service/auth";

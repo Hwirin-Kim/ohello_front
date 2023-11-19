@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
-import { useSocket } from "../context/SocketContext";
-import { useUserContext } from "../context/UserContext";
+import { useSocket } from "../../../context/SocketContext";
+import { useUserContext } from "../../../context/UserContext";
 
 export default function Chat() {
   const socket = useSocket();

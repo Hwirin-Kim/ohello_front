@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { styled } from "styled-components";
-import { postDuplicate, postRegister } from "../service/auth";
+import { postDuplicate, postRegister } from "../../service/auth";
 
 export type FormValue = {
   username: string;

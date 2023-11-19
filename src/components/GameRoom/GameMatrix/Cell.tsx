@@ -1,25 +1,30 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import Stone from "./Stone";
 type Props = {
   color: string | undefined;
 
   handleCellClick: () => void;
 };
 export default function Cell({ color, handleCellClick }: Props) {
-  return <StCellContainer color={color} onClick={handleCellClick} />;
+  return (
+    <StCellContainer color={color} onClick={handleCellClick}>
+      {color && <Stone color={color} width="75%" height="75%" />}
+    </StCellContainer>
+  );
 }
 
 const StCellContainer = styled.div<{ color?: string }>`
   display: table-cell;
   width: 4rem;
   height: 4rem;
-  border: 1px solid #fff;
-  box-shadow: ${({ theme }) => theme.border.shadow};
-  text-align: center; /* 수평 가운데 정렬 */
-  vertical-align: middle; /* 수직 가운데 정렬 */
+  border: 1px solid ${({ theme }) => theme.matrix.color};
+
+  text-align: center;
+  vertical-align: middle;
   font-size: 3rem;
 
-  &::after {
+  /* &::after {
     ${({ color }) => color === "white" && 'content:"⚪️"'}
     ${({ color }) => color === "black" && 'content:"⚫️"'}
-  }
+  } */
 `;

@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Row from "./Row";
 import ScoreBoard from "./ScoreBoard";
-import { CellType } from "../types";
-import { gameInformation } from "../utils/gameInformation";
-import { getFlipTargets } from "../utils/gameLogic";
+import { CellType } from "../../../types";
+import { gameInformation } from "../../../utils/gameInformation";
+import { getFlipTargets } from "../../../utils/gameLogic";
 
-import { getInitialMatrix } from "../utils/getInitialMatrix";
-import { useSocket } from "../context/SocketContext";
+import { getInitialMatrix } from "../../../utils/getInitialMatrix";
+import { useSocket } from "../../../context/SocketContext";
 
 type Props = {
   currentTurn: CellType;
@@ -146,5 +146,8 @@ const StArticle = styled.article``;
 const StMatrix = styled.div`
   display: table;
   border-collapse: collapse;
-  background-color: #242424ea;
+  border: 1px solid white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: ${({ theme }) => theme.matrix.shadow};
 `;

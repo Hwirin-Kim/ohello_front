@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 type Props = {
-  isReady: boolean;
+  isReady: boolean | undefined;
   isOwner: boolean;
-
+  roomStatus: "waiting" | "ready" | "playing" | undefined;
   onLeaveRoomHandler: () => void;
   onReadyHandler: () => void;
   onGameStartHandler: () => void;
@@ -13,17 +13,19 @@ type Props = {
 export default function RoomButtonBox({
   isReady,
   isOwner,
-
+  roomStatus,
   onGameStartHandler,
   onLeaveRoomHandler,
   onReadyHandler,
 }: Props) {
   return (
     <StContainer>
-      {isOwner && <StButton onClick={onGameStartHandler}>게임시작</StButton>}
       <StButton onClick={onReadyHandler}>
         {isReady ? "준비완료" : "준비하기"}
       </StButton>
+      {isOwner && roomStatus === "ready" && (
+        <StButton onClick={onGameStartHandler}>게임시작</StButton>
+      )}
       <StButton onClick={onLeaveRoomHandler}>방나가기</StButton>
     </StContainer>
   );

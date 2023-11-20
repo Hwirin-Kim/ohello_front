@@ -2,23 +2,21 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Chat from "../components/GameRoom/Chat/Chat";
 import PlayGame from "../components/GameRoom/GameMatrix/PlayGame";
-
 import { useSocket } from "../context/SocketContext";
 import { useUserContext } from "../context/UserContext";
 import { CellType, RoomInfo, SimpleUser } from "../types";
-import CurrentTurn from "../components/GameRoom/Status/CurrentTurn";
 import ProfileCard from "../components/GameRoom/Status/ProfileCard";
 import styled from "styled-components";
-import RoomButtonBox from "../components/GameRoom/RoomButtonBox";
+import RoomButtonBox from "../components/GameRoom/Status/RoomButtonBox";
 import TimerBar from "../components/GameRoom/Status/TimerBar";
 import { devices } from "../styles/devices";
+import Swal from "sweetalert2";
 
 export default function GameRoomPage() {
   const socket = useSocket();
   const { userInfo } = useUserContext();
   const { id: roomId } = useParams();
   const navigation = useNavigate();
-  const [ready, setReady] = useState(false);
   const [room, setRoom] = useState<RoomInfo | null>();
   const [isOwner, setIsOwner] = useState(false);
   const [opponent, setOpponent] = useState<SimpleUser | undefined>();
@@ -28,10 +26,7 @@ export default function GameRoomPage() {
   const [myColor, setMyColor] = useState<CellType>("black");
 
   const onReadyHandler = () => {
-    socket &&
-      socket.emit("ready", roomId, (serverStatus: boolean) => {
-        setReady(serverStatus);
-      });
+    socket && socket.emit("ready", roomId);
   };
   const onLeaveRoomHandler = () => {
     if (socket) socket.emit("leave_room", roomId);
@@ -64,6 +59,7 @@ export default function GameRoomPage() {
     }
   }, [room]);
 
+  //내 정보 가져오기
   useEffect(() => {
     if (room) {
       const users = room.users;
@@ -95,7 +91,21 @@ export default function GameRoomPage() {
         setTimer(time);
       });
       socket.on("game_over", (data) => {
-        console.log("게임오버 :", data);
+        if (data.winner.username === userInfo.username) {
+          Swal.fire({
+            title: "승리",
+            text: `${data.how}로 승리`,
+            icon: "success",
+            confirmButtonText: "확인",
+          });
+        } else {
+          Swal.fire({
+            title: "패배",
+            text: `${data.how}로 패배`,
+            icon: "error",
+            confirmButtonText: "확인",
+          });
+        }
       });
 
       socket.on("current_turn", (data) => {
@@ -133,12 +143,13 @@ export default function GameRoomPage() {
       />
       <StWrap>
         <StProfileWrap>
-          <ProfileCard userInfo={myInfo} isMe />
-          <ProfileCard userInfo={opponent} />
+          <ProfileCard userInfo={myInfo} roomStatus={room?.roomStatus} isMe />
+          <ProfileCard userInfo={opponent} roomStatus={room?.roomStatus} />
         </StProfileWrap>
         <RoomButtonBox
-          isReady={ready}
+          isReady={myInfo?.isReady}
           isOwner={isOwner}
+          roomStatus={room?.roomStatus}
           onGameStartHandler={onGameStartHandler}
           onLeaveRoomHandler={onLeaveRoomHandler}
           onReadyHandler={onReadyHandler}

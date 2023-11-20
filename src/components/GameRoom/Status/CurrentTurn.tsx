@@ -7,24 +7,19 @@ type Props = {
   myColor: CellType;
 };
 export default function CurrentTurn({ currentTurn, myColor }: Props) {
-  const stone = currentTurn === "black" ? "⚫️" : "⚪️";
   const isMyTurn = currentTurn === myColor;
 
   return (
     <StContainer>
-      <StStone>
-        {myColor === "black"
-          ? "당신은 ⚫️ 흑돌 입니다."
-          : "당신은 ⚪️ 백돌 입니다."}
-      </StStone>
-      <StText>
-        {stone}
-        {isMyTurn ? "본인 턴입니다." : "상대의 턴입니다."}
-      </StText>
+      <StText>{isMyTurn ? "당신 차례입니다." : "상대방 차례입니다."}</StText>
     </StContainer>
   );
 }
 
-const StContainer = styled.div``;
-const StStone = styled.span``;
-const StText = styled.p``;
+const StContainer = styled.div`
+  display: flex;
+`;
+
+const StText = styled.p`
+  font-weight: 300;
+`;

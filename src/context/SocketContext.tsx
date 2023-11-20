@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { io, Socket } from "socket.io-client";
 
@@ -20,15 +21,20 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }: Props) => {
   const [socket, setSocket] = useState<Socket>();
+  const navigation = useNavigate();
 
   useEffect(() => {
     const newSocket = io("http://localhost:8080", {
       withCredentials: true,
     });
     setSocket(newSocket);
-
+    newSocket.on("error", (err) => {
+      console.log(err);
+    });
     return () => {
       newSocket.close();
+      newSocket.off("error");
+      navigation("/lobby");
     };
   }, []);
 

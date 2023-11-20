@@ -6,17 +6,21 @@ import Stone from "../GameMatrix/Stone";
 type Props = {
   userInfo: SimpleUser | undefined;
   isMe?: boolean;
+  roomStatus: "waiting" | "ready" | "playing" | undefined;
 };
 
-export default function ProfileCard({ userInfo }: Props) {
-  console.log(userInfo);
+export default function ProfileCard({ userInfo, isMe, roomStatus }: Props) {
   return (
     <StContainer $color={userInfo?.stoneColor}>
       {userInfo ? (
         <>
           <StInfoWrap>
-            <StNickname>{userInfo.nickname}</StNickname>
-            <StStatus>{userInfo.isReady ? "준비완료" : "대기중"}</StStatus>
+            <StNickname>{isMe ? "나" : "상대"}</StNickname>
+            {roomStatus !== "playing" ? (
+              <StStatus>{userInfo.isReady ? "준비완료" : "대기중"}</StStatus>
+            ) : (
+              <StStatus>게임중</StStatus>
+            )}
           </StInfoWrap>
           <StStoneColor>
             <Stone color={userInfo.stoneColor} height="30px" width="30px" />

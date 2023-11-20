@@ -30,7 +30,6 @@ export default function Chat() {
   useEffect(() => {
     if (socket) {
       socket.on("receive_message", (data) => {
-        console.log(data);
         setChatLog([...chatLog, data.data]);
       });
 

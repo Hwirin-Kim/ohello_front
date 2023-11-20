@@ -8,6 +8,8 @@ import { getFlipTargets } from "../../../utils/gameLogic";
 
 import { getInitialMatrix } from "../../../utils/getInitialMatrix";
 import { useSocket } from "../../../context/SocketContext";
+import CurrentTurn from "../Status/CurrentTurn";
+import Swal from "sweetalert2";
 
 type Props = {
   currentTurn: CellType;
@@ -27,14 +29,34 @@ export default function PlayGame({
   const [gameOver, setGameOver] = useState(false);
   const [count, setCount] = useState({ white: 2, black: 2 });
   const socket = useSocket();
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "center",
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+
   const handleCellClick = (index: number) => {
     if (roomStatus !== "playing") {
-      alert("게임이 아직 시작되지 않았습니다.");
+      Toast.fire({
+        icon: "success",
+        title: "게임 시작 후 이용하세요",
+      });
       return;
     }
 
     if (currentTurn !== myColor) {
-      alert("제 턴이 아닙니다..");
+      Toast.fire({
+        icon: "error",
+        title: "상대 턴입니다..",
+        timer: 500,
+      });
       return;
     }
 
@@ -45,7 +67,12 @@ export default function PlayGame({
       !matrix[row][col] && getFlipTargets(matrix, myColor, { row, col });
 
     if (!flipTargets || !flipTargets.length) {
-      alert("둘 수 없는 위치 입니다.");
+      Toast.fire({
+        position: "top",
+        icon: "error",
+        title: "둘 수 없는 위치입니다.",
+        timer: 500,
+      });
       return;
     }
 
@@ -88,10 +115,8 @@ export default function PlayGame({
       socket.on(
         "opponent_placed_stone",
         (data: { stoneColor: CellType; index: number }) => {
-          console.log("상대방 돌 착수 데이터", data);
           if (data.stoneColor !== myColor) {
             socketClickHandler(data.index, data.stoneColor);
-            console.log("소켓핸들러 작동함!", myColor);
           }
         }
       );
@@ -124,7 +149,10 @@ export default function PlayGame({
 
   return (
     <StArticle>
-      <ScoreBoard count={count} />
+      <StWrap>
+        <ScoreBoard count={count} />
+        <CurrentTurn currentTurn={currentTurn} myColor={myColor} />
+      </StWrap>
       <StMatrix>
         {matrix.map((row, index) => {
           return (
@@ -152,4 +180,10 @@ const StMatrix = styled.div`
   border-radius: 10px;
   overflow: hidden;
   box-shadow: ${({ theme }) => theme.matrix.shadow};
+`;
+
+const StWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;

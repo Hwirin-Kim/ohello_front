@@ -32,24 +32,32 @@ export default function Header() {
 const StHeader = styled.header`
   width: 100vw;
   height: 3rem;
-  border-bottom: 1px solid #dedede;
+  border-bottom: 1px solid white;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
+  box-shadow: ${({ theme }) => theme.border.border_shadow};
 `;
 
-const StH1 = styled.h1``;
+const StH1 = styled.h1`
+  font-size: 1.5rem;
+  color: "white";
+  text-shadow: ${({ theme }) => theme.text.logo_text_shadow};
+`;
 
 const StLogin = styled.button`
-  font-size: 1.1rem;
+  font-size: 1rem;
+  text-shadow: ${({ theme }) => theme.text.logo_text_shadow};
 `;
 
 const StWrapper = styled.div`
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const StNickname = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
+  text-shadow: ${({ theme }) => theme.text.small_text_shadow};
 `;

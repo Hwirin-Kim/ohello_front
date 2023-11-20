@@ -14,6 +14,7 @@ const StStone = styled.div<{ $color: string; $width: string; $height: string }>`
   width: ${({ $width }) => $width};
   height: ${({ $height }) => $height};
   margin: auto;
+
   border-radius: 50%;
   border: 1px solid white;
 

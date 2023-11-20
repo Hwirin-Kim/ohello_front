@@ -90,10 +90,29 @@ export default function Chat() {
   );
 }
 
-const StContainer = styled.section``;
+const StContainer = styled.section`
+  width: 100%;
+  height: 13rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: ${({ theme }) => theme.border.border_shadow};
+`;
 const StChatLog = styled.div`
-  height: 20rem;
+  flex-grow: 1;
   overflow-y: scroll;
+  padding: 0.5rem;
+  &::-webkit-scrollbar {
+    width: 10px;
+    margin-left: 10px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #15ae7b;
+  }
 `;
 const StChatWrap = styled.div`
   display: flex;
@@ -101,9 +120,15 @@ const StChatWrap = styled.div`
 `;
 const StNick = styled.span<{ $isMe: boolean }>`
   margin-right: 0.3rem;
-  ${({ $isMe }) => ($isMe ? "color: black" : "color : skyblue")}
+  ${({ $isMe }) => ($isMe ? "color: white" : "color : green")}
 `;
 const StChat = styled.p``;
-const StForm = styled.form``;
-const StInput = styled.input``;
+const StForm = styled.form`
+  width: 100%;
+  display: flex;
+`;
+const StInput = styled.input`
+  flex-grow: 1;
+  padding: 0 0.5rem;
+`;
 const StButton = styled.button``;

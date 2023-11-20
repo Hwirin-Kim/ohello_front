@@ -141,7 +141,9 @@ export default function PlayGame({
     </StArticle>
   );
 }
-const StArticle = styled.article``;
+const StArticle = styled.article`
+  margin-bottom: 1.5rem;
+`;
 
 const StMatrix = styled.div`
   display: table;

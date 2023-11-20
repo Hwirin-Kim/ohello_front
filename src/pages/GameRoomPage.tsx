@@ -10,6 +10,8 @@ import CurrentTurn from "../components/GameRoom/Status/CurrentTurn";
 import ProfileCard from "../components/GameRoom/Status/ProfileCard";
 import styled from "styled-components";
 import RoomButtonBox from "../components/GameRoom/RoomButtonBox";
+import TimerBar from "../components/GameRoom/Status/TimerBar";
+import { devices } from "../styles/devices";
 
 export default function GameRoomPage() {
   const socket = useSocket();
@@ -121,26 +123,28 @@ export default function GameRoomPage() {
 
   return (
     <StContainer>
-      <h1>{timer}</h1>
+      <TimerBar timer={timer} />
 
-      <StProfileWrap>
-        <ProfileCard userInfo={myInfo} isMe />
-        <ProfileCard userInfo={opponent} />
-      </StProfileWrap>
-      <RoomButtonBox
-        isReady={ready}
-        isOwner={isOwner}
-        onGameStartHandler={onGameStartHandler}
-        onLeaveRoomHandler={onLeaveRoomHandler}
-        onReadyHandler={onReadyHandler}
-      />
       <PlayGame
         currentTurn={currentTurn}
         myColor={myColor}
         roomId={roomId}
         roomStatus={room?.roomStatus}
       />
-      <Chat />
+      <StWrap>
+        <StProfileWrap>
+          <ProfileCard userInfo={myInfo} isMe />
+          <ProfileCard userInfo={opponent} />
+        </StProfileWrap>
+        <RoomButtonBox
+          isReady={ready}
+          isOwner={isOwner}
+          onGameStartHandler={onGameStartHandler}
+          onLeaveRoomHandler={onLeaveRoomHandler}
+          onReadyHandler={onReadyHandler}
+        />
+        <Chat />
+      </StWrap>
     </StContainer>
   );
 }
@@ -149,12 +153,25 @@ const StContainer = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media (min-width: 1024px) {
+  @media ${devices.md} {
+    margin: 0 auto;
+    max-width: 1000px;
     flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
   }
 `;
 
 const StProfileWrap = styled.div`
+  width: 100%;
+  max-width: 25rem;
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+`;
+
+const StWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;

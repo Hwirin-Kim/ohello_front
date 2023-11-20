@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Stone from "./Stone";
+import { devices } from "../../../styles/devices";
 type Props = {
   color: string | undefined;
 
@@ -15,16 +16,16 @@ export default function Cell({ color, handleCellClick }: Props) {
 
 const StCellContainer = styled.div<{ color?: string }>`
   display: table-cell;
-  width: 4rem;
-  height: 4rem;
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
   border: 1px solid ${({ theme }) => theme.matrix.color};
-
   text-align: center;
   vertical-align: middle;
   font-size: 3rem;
-
-  /* &::after {
-    ${({ color }) => color === "white" && 'content:"⚪️"'}
-    ${({ color }) => color === "black" && 'content:"⚫️"'}
-  } */
+  @media ${devices.sm} {
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+  }
 `;

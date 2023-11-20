@@ -29,11 +29,18 @@ export default function RoomButtonBox({
   );
 }
 
-const StContainer = styled.div``;
+const StContainer = styled.div`
+  width: 100%;
+  max-width: 25rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+`;
 const StButton = styled.button`
   color: #fff;
-  text-shadow: ${({ theme }) => theme.text.shadow};
+  box-shadow: ${({ theme }) => theme.border.border_shadow};
   border: 1px solid #fff;
-  border-radius: 2rem;
+  border-radius: 0.5rem;
   padding: 0.4em;
 `;

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { SimpleUser } from "../../../types";
+import Stone from "../GameMatrix/Stone";
 
 type Props = {
   userInfo: SimpleUser | undefined;
@@ -8,16 +9,17 @@ type Props = {
 };
 
 export default function ProfileCard({ userInfo }: Props) {
+  console.log(userInfo);
   return (
-    <StContainer>
+    <StContainer $color={userInfo?.stoneColor}>
       {userInfo ? (
         <>
           <StInfoWrap>
             <StNickname>{userInfo.nickname}</StNickname>
-            <StStatus>{userInfo.isReady ? "대기중" : "준비완료"}</StStatus>
+            <StStatus>{userInfo.isReady ? "준비완료" : "대기중"}</StStatus>
           </StInfoWrap>
           <StStoneColor>
-            {userInfo.stoneColor === "black" ? "⚫️" : "⚪️"}
+            <Stone color={userInfo.stoneColor} height="30px" width="30px" />
           </StStoneColor>
         </>
       ) : (
@@ -27,29 +29,35 @@ export default function ProfileCard({ userInfo }: Props) {
   );
 }
 
-const StContainer = styled.div`
-  width: 190px;
-  height: 90px;
-  border-radius: 20px;
+const StContainer = styled.div<{ $color?: string }>`
+  width: 10rem;
+  height: 3.5rem;
+  border-radius: 1rem;
   border: 1px solid #dddddd;
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
+  gap: 1rem;
+  ${(props) =>
+    props.$color
+      ? `box-shadow:${
+          props.$color === "white"
+            ? props.theme.border.white_shadow
+            : props.theme.border.black_shadow
+        }`
+      : "white"}
 `;
 
 const StInfoWrap = styled.div``;
 
 const StNickname = styled.p`
-  font-size: 1.3rem;
+  font-size: 1rem;
 `;
 const StStatus = styled.div`
-  font-size: 1.2rem;
+  font-size: 1rem;
 `;
-const StStoneColor = styled.p`
-  font-size: 2rem;
-`;
+const StStoneColor = styled.p``;
 
 const StNoneUser = styled.p``;
 
